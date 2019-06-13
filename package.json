@@ -1,0 +1,23 @@
+{
+  "name": "summerproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/summer-bubbles/Summer-Project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4"
+  },
+  "bugs": {
+    "url": "https://github.com/summer-bubbles/Summer-Project/issues"
+  },
+  "homepage": "https://github.com/summer-bubbles/Summer-Project#readme"
+}
