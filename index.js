@@ -46,10 +46,15 @@ function gameLoop(delta) {
 }
 
 function play(delta) {
-  tank.x += tank.vx * Scale.unit;
-  tank.y += tank.vy * Scale.unit;
-  grass.x += grass.vx * Scale.unit;
-  grass.y += grass.vy * Scale.unit;
+  //tank.x += tank.vx * Scale.unit;
+  //tank.y += tank.vy * Scale.unit;
+  for (let i = 0; i < ground.length; i++) {
+    console.log(ground[i].x)
+    ground[i].x += tank.vx * Scale.unit;
+    ground[i].y += tank.vy * Scale.unit;
+  }
+  //grass.x += grass.vx * Scale.unit;
+  //grass.y += grass.vy * Scale.unit;
 }
 
 //This `setup` function will run when the image has loaded
@@ -77,17 +82,17 @@ function setup() {
   // app.stage.addChild(_Container);
 
   id = PIXI.loader.resources['/tankSheet.json'].textures;
-  console.log(id);
+  //console.log(id);
 
-  for (let i = 0; i <= 3; i++) {
-    for (let j = 0; j <= 3; j++) {
+  for (let i = 0; i <= 4; i++) {
+    for (let j = 0; j <= 4; j++) {
       let grass = new Sprite(id['grass03.png']);
       const grassRatio = (Scale.unit * 128) / 512;
       grass.scale.set(grassRatio, grassRatio);
       grass.anchor.set(0.5);
 
-      grass.x = Scale.width / 2;
-      grass.y = Scale.height / 2;
+      grass.x = Scale.width / 2 + i * 128 * Scale.unit - 192 * Scale.unit;
+      grass.y = Scale.height / 2 + j * 128 * Scale.unit - 192 * Scale.unit;
       grass.vx = 0;
       grass.vy = 0;
 
@@ -111,20 +116,20 @@ function setup() {
 
 let downListener = event => {
   if (event.code === 'KeyW') {
-    //tank.vy -= 1
-    grass.vy += 1;
+    tank.vy -= 1;
+    //grass.vy += 1;
   }
   if (event.code === 'KeyA') {
-    //tank.vx -= 1
-    grass.vx += 1;
+    tank.vx -= 1;
+    //grass.vx += 1;
   }
   if (event.code === 'KeyS') {
-    //tank.vy += 1
-    grass.vy -= 1;
+    tank.vy += 1;
+    //grass.vy -= 1;
   }
   if (event.code === 'KeyD') {
-    //tank.vx += 1
-    grass.vx -= 1;
+    tank.vx += 1;
+    //grass.vx -= 1;
   }
 };
 
