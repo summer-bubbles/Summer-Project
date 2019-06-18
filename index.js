@@ -9,10 +9,10 @@ var clienth = Math.max(
 var clientm = Math.min(clientw, clienth);
 
 let Scale = {
-  width: clientm * .9,
-  height: clientm * .9,
-  unit: clientm * .9 / 256,
-}
+  width: clientm * 0.9,
+  height: clientm * 0.9,
+  unit: (clientm * 0.9) / 256,
+};
 
 let ground = [];
 
@@ -42,21 +42,20 @@ loader.add('/tankSheet.json').load(setup);
 let tank, tank2, id, state;
 
 function gameLoop(delta) {
-
-  state(delta)
+  state(delta);
 }
 
-function play(delta){
-  tank.x += tank.vx * Scale.unit
-  tank.y += tank.vy * Scale.unit
-  grass.x += grass.vx * Scale.unit
-  grass.y += grass.vy * Scale.unit
+function play(delta) {
+  tank.x += tank.vx * Scale.unit;
+  tank.y += tank.vy * Scale.unit;
+  grass.x += grass.vx * Scale.unit;
+  grass.y += grass.vy * Scale.unit;
 }
 
 //This `setup` function will run when the image has loaded
 function setup() {
   //Set the game state
-  
+
   state = play;
 
   //Start the game loop
@@ -80,69 +79,62 @@ function setup() {
   id = PIXI.loader.resources['/tankSheet.json'].textures;
   console.log(id);
 
-  for (let i=0; i<=4; i++){
-    for (let j=0; j<=4; j++){
+  for (let i = 0; i <= 3; i++) {
+    for (let j = 0; j <= 3; j++) {
       let grass = new Sprite(id['grass03.png']);
-      const grassRatio = Scale.unit * 128 / 512
-      grass.scale.set(grassRatio, grassRatio)
+      const grassRatio = (Scale.unit * 128) / 512;
+      grass.scale.set(grassRatio, grassRatio);
+      grass.anchor.set(0.5);
+
       grass.x = Scale.width / 2;
       grass.y = Scale.height / 2;
-      grass.anchor.set(0.5)
-      grass.vx = 0
-      grass.vy = 0
+      grass.vx = 0;
+      grass.vy = 0;
+
+      ground.push(grass);
       app.stage.addChild(grass);
     }
   }
 
- 
-
-
   tank = new Sprite(id['tank.png']);
-  const tankRatio = Scale.unit * 16 / 204
-  tank.scale.set(tankRatio, tankRatio)
+  const tankRatio = (Scale.unit * 16) / 204;
+  tank.scale.set(tankRatio, tankRatio);
   tank.x = Scale.width / 2;
   tank.y = Scale.height / 2;
-  tank.anchor.set(0.5)
-  tank.vx = 0
-  tank.vy = 0
+  tank.anchor.set(0.5);
+  tank.vx = 0;
+  tank.vy = 0;
   app.stage.addChild(tank);
-
-  
 }
 
 //Adding event listeners for up and down
 
 let downListener = event => {
-  if (event.code === 'KeyW'){
+  if (event.code === 'KeyW') {
     //tank.vy -= 1
-    grass.vy += 1
+    grass.vy += 1;
   }
-  if (event.code === 'KeyA'){
+  if (event.code === 'KeyA') {
     //tank.vx -= 1
-    grass.vx += 1
+    grass.vx += 1;
   }
-  if (event.code === 'KeyS'){
+  if (event.code === 'KeyS') {
     //tank.vy += 1
-    grass.vy -= 1
+    grass.vy -= 1;
   }
-  if (event.code === 'KeyD'){
+  if (event.code === 'KeyD') {
     //tank.vx += 1
-    grass.vx -= 1
+    grass.vx -= 1;
   }
-}
+};
 
 // let upListener = event => {
 //   console.log('in the up', event)
 // }
 
+window.addEventListener('keydown', downListener, false);
 
-window.addEventListener(  
-  "keydown", downListener, false
-);
-
-window.addEventListener(
-  "keyup", upListener, false
-);
+window.addEventListener('keyup', upListener, false);
 
 // window.removeEventListener("keydown", downListener);
 // window.removeEventListener("keyup", upListener);
