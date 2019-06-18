@@ -35,31 +35,30 @@ let tank, tank2, grass, id, state;
 
 function gameLoop(delta) {
   //Move the tank 1 pixel
-  //tank.x += delta + 1;
+  //tank.x += 1;
   state(delta)
 }
 
 function play(delta){
-  tank.vx = 1
-  tank.x = tank.vx
+  tank.x += tank.vx
+  tank.y += tank.vy
 }
 
 //This `setup` function will run when the image has loaded
 function setup() {
   //Set the game state
   
+  state = play;
 
   //Start the game loop
   app.ticker.add(delta => gameLoop(delta));
 
   // create border around the playing field
-  let graphics = new PIXI.Graphics();
-  graphics.beginFill(0xffff00);
-
-  // set the line style to have a width of 5 and set the color to red
-  graphics.lineStyle(3, 0xff0000);
-  graphics.drawRect(0, 0, 512, 512);
-  app.stage.addChild(graphics);
+  // let graphics = new PIXI.Graphics();
+  // graphics.beginFill(0xffff00);
+  // graphics.lineStyle(3, 0xff0000);
+  // graphics.drawRect(0, 0, 512, 512);
+  // app.stage.addChild(graphics);
 
   // Create the grass background texture for the playing field
   let grassTexture = PIXI.utils.TextureCache['grass03.png'];
@@ -73,11 +72,44 @@ function setup() {
   console.log(id);
 
   tank = new Sprite(id['tank.png']);
-  tank.x = 100;
-  tank.y = 100;
-  tank.vx = 0;
-  tank.vy = 0;
+  tank.x = 200;
+  tank.y = 200;
+  tank.vx = 0
+  tank.vy = 0
   app.stage.addChild(tank);
 
-  state = play;
+  
 }
+
+//Adding event listeners for up and down
+
+let downListener = event => {
+  if (event.code === 'KeyW'){
+    tank.vy = -1
+  }
+  if (event.code === 'KeyA'){
+    tank.vx = -1
+  }
+  if (event.code === 'KeyS'){
+    tank.vy = 1
+  }
+  if (event.code === 'KeyD'){
+    tank.vx = 1
+  }
+}
+
+// let upListener = event => {
+//   console.log('in the up', event)
+// }
+
+
+window.addEventListener(  
+  "keydown", downListener, false
+);
+
+window.addEventListener(
+  "keyup", upListener, false
+);
+
+// window.removeEventListener("keydown", downListener);
+// window.removeEventListener("keyup", upListener);
