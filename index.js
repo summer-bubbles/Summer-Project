@@ -31,19 +31,35 @@ document.getElementById('playfield').appendChild(app.view);
 loader.add('/tankSheet.json').load(setup);
 
 //Define variables that might be used in more than one function
-let tank, tank2, grass, id;
+let tank, tank2, grass, id, state;
 
-function gameLoop(delta){
-
-  //Move the tank 1 pixel 
-  tank.x += delta + 1;
+function gameLoop(delta) {
+  //Move the tank 1 pixel
+  //tank.x += delta + 1;
+  state(delta)
 }
 
 //This `setup` function will run when the image has loaded
 function setup() {
+  //Set the game state
+  state = play;
+
+  //Start the game loop
+  app.ticker.add(delta => gameLoop(delta));
+
+  function gameLoop(delta) {
+    //Update the current game state:
+    state(delta);
+  }
+
+  function play(delta) {
+    //Move the cat 1 pixel to the right each frame
+    cat.vx = 1;
+    cat.x += cat.vx;
+  }
 
   app.ticker.add(delta => gameLoop(delta));
-  
+
   // create border around the playing field
   let graphics = new PIXI.Graphics();
   graphics.beginFill(0xffff00);
