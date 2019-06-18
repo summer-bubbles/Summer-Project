@@ -39,25 +39,17 @@ function gameLoop(delta) {
   state(delta)
 }
 
+function play(delta){
+  tank.vx = 1
+  tank.x = tank.vx
+}
+
 //This `setup` function will run when the image has loaded
 function setup() {
   //Set the game state
-  state = play;
+  
 
   //Start the game loop
-  app.ticker.add(delta => gameLoop(delta));
-
-  function gameLoop(delta) {
-    //Update the current game state:
-    state(delta);
-  }
-
-  function play(delta) {
-    //Move the cat 1 pixel to the right each frame
-    cat.vx = 1;
-    cat.x += cat.vx;
-  }
-
   app.ticker.add(delta => gameLoop(delta));
 
   // create border around the playing field
@@ -83,7 +75,9 @@ function setup() {
   tank = new Sprite(id['tank.png']);
   tank.x = 100;
   tank.y = 100;
-
-  //Add the cat to the stage
+  tank.vx = 0;
+  tank.vy = 0;
   app.stage.addChild(tank);
+
+  state = play;
 }
