@@ -129,6 +129,21 @@ let downListener = event => {
   }
 };
 
+let upListener = event => {
+  if (event.code === 'KeyW') {
+    tank.vy = 0;
+  }
+  if (event.code === 'KeyA') {
+    tank.vx = 0;
+  }
+  if (event.code === 'KeyS') {
+    tank.vy = 0;
+  }
+  if (event.code === 'KeyD') {
+    tank.vx = 0;
+  }
+};
+
 window.addEventListener('keydown', downListener, false);
 
 window.addEventListener('keyup', upListener, false);
