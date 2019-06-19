@@ -46,20 +46,19 @@ function gameLoop(delta) {
 }
 
 function play(delta) {
-  //tank.x += tank.vx * Scale.unit;
-  //tank.y += tank.vy * Scale.unit;
-  for (let i = 0; i < ground.length; i++) {
-    console.log(ground[i].x)
-    ground[i].x += tank.vx * Scale.unit;
-    ground[i].y += tank.vy * Scale.unit;
-  }
+  tank.x += tank.vx * Scale.unit;
+  tank.y += tank.vy * Scale.unit;
+  // for (let i = 0; i < ground.length; i++) {
+  //   console.log(ground[i].x)
+  //   ground[i].x += tank.vx * Scale.unit;
+  //   ground[i].y += tank.vy * Scale.unit;
+  // }
   //grass.x += grass.vx * Scale.unit;
   //grass.y += grass.vy * Scale.unit;
 }
 
 //This `setup` function will run when the image has loaded
 function setup() {
-
   //Set the game state
   state = play;
 
@@ -90,29 +89,42 @@ function setup() {
   tank.scale.set(tankRatio, tankRatio);
   tank.x = Scale.width / 2;
   tank.y = Scale.height / 2;
-  tank.anchor.set(0.5);
+  tank.anchor.set(0.5, 0.5);
+  tank.rotation = 0;
   tank.vx = 0;
   tank.vy = 0;
   app.stage.addChild(tank);
 }
 
-
 //Adding event listeners for up and down
+// eslint-disable-next-line complexity
 let downListener = event => {
   if (event.code === 'KeyW') {
-    tank.vy -= 1;
+    if (tank.vy > -1) {
+      tank.vy -= 1;
+      tank.rotation = 3.55;
+    }
     //grass.vy += 1;
   }
   if (event.code === 'KeyA') {
-    tank.vx -= 1;
+    if (tank.vx > -1) {
+      tank.vx -= 1;
+      tank.rotation = 7;
+    }
     //grass.vx += 1;
   }
   if (event.code === 'KeyS') {
-    tank.vy += 1;
+    if (tank.vy < 1) {
+      tank.vy += 1;
+      tank.rotation = 10;
+    }
     //grass.vy -= 1;
   }
   if (event.code === 'KeyD') {
-    tank.vx += 1;
+    if (tank.vx < 1) {
+      tank.vx += 1;
+      tank.rotation = 20;
+    }
     //grass.vx -= 1;
   }
 };
