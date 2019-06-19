@@ -39,7 +39,7 @@ document.getElementById('playfield').appendChild(app.view);
 loader.add('/tankSheet.json').load(setup);
 
 //Define variables that might be used in more than one function
-let tank, tank2, id, state;
+let tank, tank2, id, state, bulletSprite, bullet;
 
 function gameLoop(delta) {
   state(delta);
@@ -104,28 +104,24 @@ let downListener = event => {
       tank.vy -= 1;
       tank.rotation = 15.7;
     }
-    //grass.vy += 1;
   }
   if (event.code === 'KeyA') {
     if (tank.vx > -1) {
       tank.vx -= 1;
       tank.rotation = 7.85;
     }
-    //grass.vx += 1;
   }
   if (event.code === 'KeyS') {
     if (tank.vy < 1) {
       tank.vy += 1;
       tank.rotation = 0;
     }
-    //grass.vy -= 1;
   }
   if (event.code === 'KeyD') {
     if (tank.vx < 1) {
       tank.vx += 1;
       tank.rotation = 23.55;
     }
-    //grass.vx -= 1;
   }
 };
 
@@ -144,9 +140,47 @@ let upListener = event => {
   }
 };
 
+//Create the bullet
+
+app.stage.interactive = true;
+
+app.stage.on('mousedown', function(e) {
+  shoot(tank.rotation, {
+    x: tank.position.x + Math.cos(tank.rotation) * 20,
+    y: tank.position.y + Math.sin(tank.rotation) * 20,
+  });
+});
+
+let bulletSpeed = 5;
+let bullets = [];
+
+bulletSprite = new PIXI.Texture.fromImage('/bullet.png');
+
+function shoot(rotation, startPosition) {
+  bullet = new PIXI.Sprite(bulletSprite);
+  bullet.position.x = startPosition.x;
+  bullet.position.y = startPosition.y;
+  bullet.rotation = rotation;
+  app.stage.addChild(bullet);
+  bullets.push(bullet);
+}
+
+function rotateToPoint(mx, my, px, py) {
+  var dist_Y = my - py;
+  var dist_X = mx - px;
+  var angle = Math.atan2(dist_Y, dist_X);
+  return angle;
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  for (var b = bullets.length - 1; b >= 0; b--) {
+    bullets[b].position.x += Math.cos(bullets[b].rotation) * bulletSpeed;
+    bullets[b].position.y += Math.sin(bullets[b].rotation) * bulletSpeed;
+  }
+}
+animate();
+
 window.addEventListener('keydown', downListener, false);
 
 window.addEventListener('keyup', upListener, false);
-
-// window.removeEventListener("keydown", downListener);
-// window.removeEventListener("keyup", upListener);
