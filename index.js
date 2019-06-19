@@ -145,6 +145,7 @@ let upListener = event => {
 app.stage.interactive = true;
 
 app.stage.on('mousedown', function(e) {
+  console.log(app.stage)
   shoot(tank.rotation, {
     x: tank.position.x + Math.cos(tank.rotation) * 20,
     y: tank.position.y + Math.sin(tank.rotation) * 20,
