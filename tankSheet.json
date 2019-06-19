@@ -1,0 +1,41 @@
+{"frames": {
+
+"grass03.png":
+{
+	"frame": {"x":0,"y":0,"w":512,"h":512},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":512,"h":512},
+	"sourceSize": {"w":512,"h":512},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"tank.png":
+{
+	"frame": {"x":0,"y":512,"w":177,"h":204},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":177,"h":204},
+	"sourceSize": {"w":177,"h":204},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"tank2.png":
+{
+	"frame": {"x":177,"y":512,"w":178,"h":174},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":178,"h":174},
+	"sourceSize": {"w":178,"h":174},
+	"anchor": {"x":0.5,"y":0.5}
+}},
+"animations": {
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "tankSheet.png",
+	"format": "RGBA8888",
+	"size": {"w":512,"h":716},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:0f55f0fd47b8c16eb905f07b47aa9446:c0b8454b7d8ab3fc564dbcf0f25e5e3d:68c78b483093d56ce56803a843d13e20$"
+}
+}
