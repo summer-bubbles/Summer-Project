@@ -11,10 +11,14 @@ const clientm = Math.min(clientw, clienth);
 let Scale = {
   width: clientm * 0.9,
   height: clientm * 0.9,
-  unit: (clientm * 0.9) / 256
+  unit: (clientm * 0.9) / 256,
 };
 
+//Holder array variables
 let ground = [];
+let houses = [];
+let bulletSpeed = 5;
+let bullets = [];
 
 //Aliases
 let Application = PIXI.Application,
@@ -29,17 +33,17 @@ let app = new Application({
   antialias: true,
   transparent: false,
   autoDensity: true,
-  backgroundColor: 0x1b4f72
+  backgroundColor: 0x1b4f72,
 });
 
 //Add the canvas that Pixi automatically created for you to the HTML document
-document.getElementById("playfield").appendChild(app.view);
+document.getElementById('playfield').appendChild(app.view);
 
 //load an image and run the `setup` function when it's done
-loader.add("/tankSheet.json").load(setup);
+loader.add('/tankSheet.json').load(setup);
 
 //Define variables that might be used in more than one function
-let tank, tank2, id, state, bulletSprite, bullet;
+let tank, tank2, id, state, bulletSprite, bullet, house, explosion, explosionSprite;
 
 function gameLoop(delta) {
   state(delta);
@@ -55,9 +59,39 @@ function play(delta) {
   // }
   //grass.x += grass.vx * Scale.unit;
   //grass.y += grass.vy * Scale.unit;
+
+  for (let i = 0; i < houses.length; i++) {
+    let house = houses[i];
+    //console.log(house)
+    if (bullets.length !== 0) {
+      for (let j = 0; j < bullets.length; j++) {
+        let bullet = bullets[j];
+        if (hitTestRectangle(tank, house)) {
+          house.tint = 0xff3300;
+        } else if (hitTestRectangle(bullet, house)) {
+          explosion = new Sprite(explosionSprite)
+          const explosionRatio = (Scale.unit * 16) / 204;
+          explosion.scale.set(explosionRatio, explosionRatio)
+          explosion.x = house.centerX;
+          explosion.y = house.centerY;
+          explosion.anchor.set(.7, .7);
+          app.stage.addChild(explosion)
+          house.visible = false;
+          //explosion.visible = false;
+        } else {
+          house.tint = 0xccff99;
+        }
+      }
+    } else if (hitTestRectangle(tank, house)) {
+      house.tint = 0xff3300;
+    } else {
+      house.tint = 0xccff99;
+    }
+  }
 }
 
 //This `setup` function will run when the image has loaded
+// eslint-disable-next-line max-statements
 function setup() {
   //Set the game state
   state = play;
@@ -65,11 +99,11 @@ function setup() {
   //Start the game loop
   app.ticker.add(delta => gameLoop(delta));
 
-  id = PIXI.loader.resources["/tankSheet.json"].textures;
+  id = PIXI.loader.resources['/tankSheet.json'].textures;
 
   for (let i = 0; i <= 4; i++) {
     for (let j = 0; j <= 4; j++) {
-      let grass = new Sprite(id["grass03.png"]);
+      let grass = new Sprite(id['grass03.png']);
       const grassRatio = (Scale.unit * 128) / 512;
       grass.scale.set(grassRatio, grassRatio);
       grass.anchor.set(0.5);
@@ -84,7 +118,19 @@ function setup() {
     }
   }
 
-  tank = new Sprite(id["tank.png"]);
+  explosionSprite = new PIXI.Texture.fromImage('/explosion.png')
+  explosion = new Sprite(explosionSprite)
+  const explosionRatio = (Scale.unit * 16) / 204;
+  explosion.scale.set(explosionRatio, explosionRatio)
+  explosion.x = Scale.width / 2;
+  explosion.y = Scale.height / 2;
+  explosion.anchor.set(0.5, 0.5);
+  explosion.rotation = 0;
+  explosion.vx = 0;
+  explosion.vy = 0;
+  
+
+  tank = new Sprite(id['tank.png']);
   const tankRatio = (Scale.unit * 16) / 204;
   tank.scale.set(tankRatio, tankRatio);
   tank.x = Scale.width / 2;
@@ -95,7 +141,7 @@ function setup() {
   tank.vy = 0;
   app.stage.addChild(tank);
 
-  let houseSprite = new PIXI.Texture.fromImage("/House.png");
+  let houseSprite = new PIXI.Texture.fromImage('/House.png');
 
   for (let i = 0; i < 5; i++) {
     house = new Sprite(houseSprite);
@@ -107,6 +153,7 @@ function setup() {
     house.rotation = 0;
     house.vx = 0;
     house.vy = 0;
+    houses.push(house);
     app.stage.addChild(house);
   }
 }
@@ -114,53 +161,53 @@ function setup() {
 //Adding event listeners for up and down
 // eslint-disable-next-line complexity
 let downListener = event => {
-  if (event.code === "KeyW") {
+  if (event.code === 'KeyW') {
     if (tank.vy > -1) {
       tank.vy -= 1;
       tank.vx = 0;
       tank.rotation = 15.7;
     }
   }
-  if (event.code === "KeyA") {
+  if (event.code === 'KeyA') {
     if (tank.vx > -1) {
       tank.vx -= 1;
       tank.vy = 0;
       tank.rotation = 7.85;
     }
   }
-  if (event.code === "KeyS") {
+  if (event.code === 'KeyS') {
     if (tank.vy < 1) {
       tank.vy += 1;
       tank.vx = 0;
       tank.rotation = 0;
     }
   }
-  if (event.code === "KeyD") {
+  if (event.code === 'KeyD') {
     if (tank.vx < 1) {
       tank.vx += 1;
       tank.vy = 0;
       tank.rotation = 23.55;
     }
   }
-  if (event.code === "Space") {
+  if (event.code === 'Space') {
     shoot(tank.rotation, {
       x: tank.position.x + Math.cos(tank.rotation) * 20,
-      y: tank.position.y + Math.sin(tank.rotation) * 20
+      y: tank.position.y + Math.sin(tank.rotation) * 20,
     });
   }
 };
 
 let upListener = event => {
-  if (event.code === "KeyW") {
+  if (event.code === 'KeyW') {
     tank.vy = 0;
   }
-  if (event.code === "KeyA") {
+  if (event.code === 'KeyA') {
     tank.vx = 0;
   }
-  if (event.code === "KeyS") {
+  if (event.code === 'KeyS') {
     tank.vy = 0;
   }
-  if (event.code === "KeyD") {
+  if (event.code === 'KeyD') {
     tank.vx = 0;
   }
 };
@@ -176,10 +223,7 @@ app.stage.interactive = true;
 //   });
 // });
 
-let bulletSpeed = 5;
-let bullets = [];
-
-bulletSprite = new PIXI.Texture.fromImage("/bullet.png");
+bulletSprite = new PIXI.Texture.fromImage('/bullet.png');
 
 function shoot(rotation, startPosition) {
   bullet = new PIXI.Sprite(bulletSprite);
@@ -188,7 +232,7 @@ function shoot(rotation, startPosition) {
   bullet.position.x = startPosition.x;
   bullet.position.y = startPosition.y;
   bullet.rotation = rotation + 7.85;
-  bullet.anchor.set(0, -0.3);
+  bullet.anchor.set(0, -0.8);
   app.stage.addChild(bullet);
   bullets.push(bullet);
 }
@@ -200,6 +244,63 @@ function rotateToPoint(mx, my, px, py) {
   return angle;
 }
 
+function getVisualMetrics() {
+  return {
+    height: app.renderer.height,
+    width: app.renderer.width,
+    xmin: 0,
+    xmax: app.renderer.width - 1,
+    ymin: 0,
+    ymax: app.renderer.height - 1,
+  };
+}
+
+function hitTestRectangle(r1, r2) {
+  //Define the variables we'll need to calculate
+  let hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
+
+  //hit will determine whether there's a collision
+  hit = false;
+
+  //Find the center points of each sprite
+  r1.centerX = r1.x + r1.width / 2;
+  r1.centerY = r1.y + r1.height / 2;
+  r2.centerX = r2.x + r2.width / 2;
+  r2.centerY = r2.y + r2.height / 2;
+
+  //Find the half-widths and half-heights of each sprite
+  r1.halfWidth = r1.width / 2;
+  r1.halfHeight = r1.height / 2;
+  r2.halfWidth = r2.width / 2;
+  r2.halfHeight = r2.height / 2;
+
+  //Calculate the distance vector between the sprites
+  vx = r1.centerX - r2.centerX;
+  vy = r1.centerY - r2.centerY;
+
+  //Figure out the combined half-widths and half-heights
+  combinedHalfWidths = r1.halfWidth + r2.halfWidth;
+  combinedHalfHeights = r1.halfHeight + r2.halfHeight;
+
+  //Check for a collision on the x axis
+  if (Math.abs(vx) < combinedHalfWidths) {
+    //A collision might be occurring. Check for a collision on the y axis
+    if (Math.abs(vy) < combinedHalfHeights) {
+      //There's definitely a collision happening
+      hit = true;
+    } else {
+      //There's no collision on the y axis
+      hit = false;
+    }
+  } else {
+    //There's no collision on the x axis
+    hit = false;
+  }
+
+  //`hit` will be either `true` or `false`
+  return hit;
+}
+
 function animate() {
   requestAnimationFrame(animate);
   for (var b = bullets.length - 1; b >= 0; b--) {
@@ -207,8 +308,9 @@ function animate() {
     bullets[b].position.y += Math.sin(bullets[b].rotation) * bulletSpeed;
   }
 }
+
 animate();
 
-window.addEventListener("keydown", downListener, false);
+window.addEventListener('keydown', downListener, false);
 
-window.addEventListener("keyup", upListener, false);
+window.addEventListener('keyup', upListener, false);
