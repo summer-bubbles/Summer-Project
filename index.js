@@ -102,24 +102,28 @@ let downListener = event => {
   if (event.code === "KeyW") {
     if (tank.vy > -1) {
       tank.vy -= 1;
+      tank.vx = 0;
       tank.rotation = 15.7;
     }
   }
   if (event.code === "KeyA") {
     if (tank.vx > -1) {
       tank.vx -= 1;
+      tank.vy = 0;
       tank.rotation = 7.85;
     }
   }
   if (event.code === "KeyS") {
     if (tank.vy < 1) {
       tank.vy += 1;
+      tank.vx = 0;
       tank.rotation = 0;
     }
   }
   if (event.code === "KeyD") {
     if (tank.vx < 1) {
       tank.vx += 1;
+      tank.vy = 0;
       tank.rotation = 23.55;
     }
   }
