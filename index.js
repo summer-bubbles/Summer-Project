@@ -11,7 +11,7 @@ const clientm = Math.min(clientw, clienth);
 let Scale = {
   width: clientm * 0.9,
   height: clientm * 0.9,
-  unit: (clientm * 0.9) / 256
+  unit: (clientm * 0.9) / 256,
 };
 
 let ground = [];
@@ -29,14 +29,14 @@ let app = new Application({
   antialias: true,
   transparent: false,
   autoDensity: true,
-  backgroundColor: 0x1b4f72
+  backgroundColor: 0x1b4f72,
 });
 
 //Add the canvas that Pixi automatically created for you to the HTML document
-document.getElementById("playfield").appendChild(app.view);
+document.getElementById('playfield').appendChild(app.view);
 
 //load an image and run the `setup` function when it's done
-loader.add("/tankSheet.json").load(setup);
+loader.add('/tankSheet.json').load(setup);
 
 //Define variables that might be used in more than one function
 let tank, tank2, id, state, bulletSprite, bullet;
@@ -65,11 +65,11 @@ function setup() {
   //Start the game loop
   app.ticker.add(delta => gameLoop(delta));
 
-  id = PIXI.loader.resources["/tankSheet.json"].textures;
+  id = PIXI.loader.resources['/tankSheet.json'].textures;
 
   for (let i = 0; i <= 4; i++) {
     for (let j = 0; j <= 4; j++) {
-      let grass = new Sprite(id["grass03.png"]);
+      let grass = new Sprite(id['grass03.png']);
       const grassRatio = (Scale.unit * 128) / 512;
       grass.scale.set(grassRatio, grassRatio);
       grass.anchor.set(0.5);
@@ -84,7 +84,7 @@ function setup() {
     }
   }
 
-  tank = new Sprite(id["tank.png"]);
+  tank = new Sprite(id['tank.png']);
   const tankRatio = (Scale.unit * 16) / 204;
   tank.scale.set(tankRatio, tankRatio);
   tank.x = Scale.width / 2;
@@ -99,47 +99,53 @@ function setup() {
 //Adding event listeners for up and down
 // eslint-disable-next-line complexity
 let downListener = event => {
-  if (event.code === "KeyW") {
+  if (event.code === 'KeyW') {
     if (tank.vy > -1) {
       tank.vy -= 1;
       tank.vx = 0;
       tank.rotation = 15.7;
     }
   }
-  if (event.code === "KeyA") {
+  if (event.code === 'KeyA') {
     if (tank.vx > -1) {
       tank.vx -= 1;
       tank.vy = 0;
       tank.rotation = 7.85;
     }
   }
-  if (event.code === "KeyS") {
+  if (event.code === 'KeyS') {
     if (tank.vy < 1) {
       tank.vy += 1;
       tank.vx = 0;
       tank.rotation = 0;
     }
   }
-  if (event.code === "KeyD") {
+  if (event.code === 'KeyD') {
     if (tank.vx < 1) {
       tank.vx += 1;
       tank.vy = 0;
       tank.rotation = 23.55;
     }
   }
+  if (event.code === 'Space') {
+    shoot(tank.rotation, {
+      x: tank.position.x + Math.cos(tank.rotation) * 20,
+      y: tank.position.y + Math.sin(tank.rotation) * 20,
+    });
+  }
 };
 
 let upListener = event => {
-  if (event.code === "KeyW") {
+  if (event.code === 'KeyW') {
     tank.vy = 0;
   }
-  if (event.code === "KeyA") {
+  if (event.code === 'KeyA') {
     tank.vx = 0;
   }
-  if (event.code === "KeyS") {
+  if (event.code === 'KeyS') {
     tank.vy = 0;
   }
-  if (event.code === "KeyD") {
+  if (event.code === 'KeyD') {
     tank.vx = 0;
   }
 };
@@ -148,24 +154,26 @@ let upListener = event => {
 
 app.stage.interactive = true;
 
-app.stage.on("mousedown", function(e) {
-  shoot(tank.rotation, {
-    x: tank.position.x + Math.cos(tank.rotation) * 20,
-    y: tank.position.y + Math.sin(tank.rotation) * 20
-  });
-});
+// app.stage.on('mousedown', function(e) {
+//   shoot(tank.rotation, {
+//     x: tank.position.x + Math.cos(tank.rotation) * 20,
+//     y: tank.position.y + Math.sin(tank.rotation) * 20,
+//   });
+// });
 
 let bulletSpeed = 5;
 let bullets = [];
 
-bulletSprite = new PIXI.Texture.fromImage("/bullet.png");
+bulletSprite = new PIXI.Texture.fromImage('/bullet.png');
 
 function shoot(rotation, startPosition) {
   bullet = new PIXI.Sprite(bulletSprite);
-  bullet.position.x = startPosition.x;
+  const bulletRatio = (Scale.unit * 8) / 256;
+  bullet.scale.set(bulletRatio, bulletRatio);
+  bullet.position.x = startPosition.x
   bullet.position.y = startPosition.y;
   bullet.rotation = rotation + 7.85;
-  bullet.anchor.set(-0.3, -0.3);
+  bullet.anchor.set(1, 1);
   app.stage.addChild(bullet);
   bullets.push(bullet);
 }
@@ -186,6 +194,6 @@ function animate() {
 }
 animate();
 
-window.addEventListener("keydown", downListener, false);
+window.addEventListener('keydown', downListener, false);
 
-window.addEventListener("keyup", upListener, false);
+window.addEventListener('keyup', upListener, false);
