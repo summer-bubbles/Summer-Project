@@ -183,12 +183,12 @@ bulletSprite = new PIXI.Texture.fromImage("/bullet.png");
 
 function shoot(rotation, startPosition) {
   bullet = new PIXI.Sprite(bulletSprite);
-  const bulletRatio = (Scale.unit * 8) / 256;
+  const bulletRatio = (Scale.unit * 4) / 256;
   bullet.scale.set(bulletRatio, bulletRatio);
   bullet.position.x = startPosition.x;
   bullet.position.y = startPosition.y;
   bullet.rotation = rotation + 7.85;
-  bullet.anchor.set(1, 1);
+  bullet.anchor.set(0, -0.3);
   app.stage.addChild(bullet);
   bullets.push(bullet);
 }
