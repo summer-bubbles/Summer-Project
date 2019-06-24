@@ -76,8 +76,7 @@ function play(delta) {
     if (bullets.length !== 0) {
       for (let j = 0; j < bullets.length; j++) {
         bullet = bullets[j];
-        console.log(`HOUSE ===>`, house);
-        
+       
         if (hitTestRectangle(tank, house)) {
           house.tint = 0xff3300;
 
