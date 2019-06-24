@@ -71,12 +71,20 @@ function play(delta) {
 
   for (let i = 0; i < houses.length; i++) {
     let house = houses[i];
+
     //console.log(house)
     if (bullets.length !== 0) {
       for (let j = 0; j < bullets.length; j++) {
         let bullet = bullets[j];
+        console.log(`HOUSE ===>`, house);
         if (hitTestRectangle(tank, house)) {
           house.tint = 0xff3300;
+          contain(house, {
+            x: tank.x,
+            y: tank.y,
+            width: tank.width,
+            height: tank.height
+          });
         } else if (hitTestRectangle(bullet, house)) {
           explosion = new Sprite(explosionSprite);
           const explosionRatio = (Scale.unit * 16) / 204;
@@ -155,21 +163,21 @@ function setup() {
 
   //create Houses
 
-  // let houseSprite = new PIXI.Texture.fromImage("/House.png");
+  let houseSprite = new PIXI.Texture.fromImage("/House.png");
 
-  // for (let i = 0; i < 5; i++) {
-  //   house = new Sprite(houseSprite);
-  //   const houseRatio = (Scale.unit * 4) / 204;
-  //   house.scale.set(houseRatio, houseRatio);
-  //   house.x = Math.floor(Math.random() * 500) + 1;
-  //   house.y = Math.floor(Math.random() * 500 + 1);
-  //   house.anchor.set(0.5, 0.5);
-  //   house.rotation = 0;
-  //   house.vx = 0;
-  //   house.vy = 0;
-  //   houses.push(house);
-  //   app.stage.addChild(house);
-  // }
+  for (let i = 0; i < 5; i++) {
+    house = new Sprite(houseSprite);
+    const houseRatio = (Scale.unit * 4) / 204;
+    house.scale.set(houseRatio, houseRatio);
+    house.x = Math.floor(Math.random() * 500) + 1;
+    house.y = Math.floor(Math.random() * 500 + 1);
+    house.anchor.set(0.5, 0.5);
+    house.rotation = 0;
+    house.vx = 0;
+    house.vy = 0;
+    houses.push(house);
+    app.stage.addChild(house);
+  }
 }
 
 //Adding event listeners for up and down
