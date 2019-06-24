@@ -72,7 +72,6 @@ function play(delta) {
   for (let i = 0; i < houses.length; i++) {
     house = houses[i];
     
-    //console.log(house)
     if (bullets.length !== 0) {
       for (let j = 0; j < bullets.length; j++) {
         bullet = bullets[j];
@@ -167,11 +166,11 @@ function setup() {
 
   let houseSprite = new PIXI.Texture.fromImage("/House.png");
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 40; i++) {
     house = new Sprite(houseSprite);
     const houseRatio = (Scale.unit * 4) / 204;
     house.scale.set(houseRatio, houseRatio);
-    house.x = Math.floor(Math.random() * 500) + 1;
+    house.x = Math.floor(Math.random() * 500 + 1);
     house.y = Math.floor(Math.random() * 500 + 1);
     house.anchor.set(0.5, 0.5);
     house.rotation = 0;
