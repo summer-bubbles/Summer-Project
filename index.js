@@ -71,20 +71,28 @@ function play(delta) {
 
   for (let i = 0; i < houses.length; i++) {
     let house = houses[i];
-
+    
     //console.log(house)
     if (bullets.length !== 0) {
       for (let j = 0; j < bullets.length; j++) {
         let bullet = bullets[j];
         console.log(`HOUSE ===>`, house);
+        
         if (hitTestRectangle(tank, house)) {
           house.tint = 0xff3300;
-          contain(house, {
-            x: tank.x,
-            y: tank.y,
-            width: tank.width,
-            height: tank.height
-          });
+          // contain(tank, {
+          //   x: house.x,
+          //   y: house.y,
+          //   width: house.width,
+          //   height: house.height
+          // });
+          spriteCollision(tank, {
+            x: house.x,
+            y: house.y,
+            width: house.width,
+            height: house.height
+          })
+          
         } else if (hitTestRectangle(bullet, house)) {
           explosion = new Sprite(explosionSprite);
           const explosionRatio = (Scale.unit * 16) / 204;
@@ -321,6 +329,42 @@ function hitTestRectangle(r1, r2) {
 
   //`hit` will be either `true` or `false`
   return hit;
+}
+
+//spriteCollision helper func that checks for sprite boundaries
+function spriteCollision(sprite, object) {
+  let collision = undefined;
+
+  //Left
+  if (sprite.x < object.x) {
+    sprite.vx = 0;
+    //sprite.x = container.x;
+    collision = "left";
+  }
+
+  //Top
+  if (sprite.y < object.y) {
+    sprite.vy = 0;
+    //sprite.y = container.y;
+    collision = "top";
+  }
+
+  //Right
+  if (sprite.x + sprite.width > object.width) {
+    sprite.vx = 0;
+    //sprite.x = container.width - sprite.width;
+    collision = "right";
+  }
+
+  //Bottom
+  if (sprite.y + sprite.height > object.height) {
+    sprite.vy = 0;
+    //sprite.y = container.height - sprite.height;
+    collision = "bottom";
+  }
+
+  //Return the `collision` value
+  return collision;
 }
 
 //Contain Helper Function For Boundries around sprite!
