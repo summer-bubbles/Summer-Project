@@ -70,22 +70,17 @@ function play(delta) {
   contain(tank, { x: 20, y: 20, width: Scale.width, height: Scale.height });
 
   for (let i = 0; i < houses.length; i++) {
-    let house = houses[i];
+    house = houses[i];
     
     //console.log(house)
     if (bullets.length !== 0) {
       for (let j = 0; j < bullets.length; j++) {
-        let bullet = bullets[j];
+        bullet = bullets[j];
         console.log(`HOUSE ===>`, house);
         
         if (hitTestRectangle(tank, house)) {
           house.tint = 0xff3300;
-          // contain(tank, {
-          //   x: house.x,
-          //   y: house.y,
-          //   width: house.width,
-          //   height: house.height
-          // });
+
           spriteCollision(tank, {
             x: house.x,
             y: house.y,
@@ -173,7 +168,7 @@ function setup() {
 
   let houseSprite = new PIXI.Texture.fromImage("/House.png");
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 10; i++) {
     house = new Sprite(houseSprite);
     const houseRatio = (Scale.unit * 4) / 204;
     house.scale.set(houseRatio, houseRatio);
