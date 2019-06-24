@@ -155,21 +155,21 @@ function setup() {
 
   //create Houses
 
-  let houseSprite = new PIXI.Texture.fromImage("/House.png");
+  // let houseSprite = new PIXI.Texture.fromImage("/House.png");
 
-  for (let i = 0; i < 5; i++) {
-    house = new Sprite(houseSprite);
-    const houseRatio = (Scale.unit * 4) / 204;
-    house.scale.set(houseRatio, houseRatio);
-    house.x = Math.floor(Math.random() * 500) + 1;
-    house.y = Math.floor(Math.random() * 500 + 1);
-    house.anchor.set(0.5, 0.5);
-    house.rotation = 0;
-    house.vx = 0;
-    house.vy = 0;
-    houses.push(house);
-    app.stage.addChild(house);
-  }
+  // for (let i = 0; i < 5; i++) {
+  //   house = new Sprite(houseSprite);
+  //   const houseRatio = (Scale.unit * 4) / 204;
+  //   house.scale.set(houseRatio, houseRatio);
+  //   house.x = Math.floor(Math.random() * 500) + 1;
+  //   house.y = Math.floor(Math.random() * 500 + 1);
+  //   house.anchor.set(0.5, 0.5);
+  //   house.rotation = 0;
+  //   house.vx = 0;
+  //   house.vy = 0;
+  //   houses.push(house);
+  //   app.stage.addChild(house);
+  // }
 }
 
 //Adding event listeners for up and down
