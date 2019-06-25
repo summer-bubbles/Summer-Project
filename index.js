@@ -21,6 +21,9 @@ let bulletSpeed = 5;
 let bullets = [];
 let enemyTanks = [];
 
+//frame counter;
+let counter = 0;
+
 //Aliases
 let Application = PIXI.Application,
   loader = PIXI.loader,
@@ -55,6 +58,7 @@ let tank,
   explosionSprite;
 
 function gameLoop(delta) {
+  counter++;
   state(delta);
 }
 
@@ -80,14 +84,8 @@ function play(delta) {
         bullet = bullets[j];
         if (hitTestRectangle(tank, house)) {
           house.tint = 0xff3300;
-
-          spriteCollision(tank, {
-            x: house.x,
-            y: house.y,
-            width: house.width,
-            height: house.height,
-          });
-          
+          tank.x -= tank.vx * Scale.unit;
+          tank.y -= tank.vy * Scale.unit;
         } else if (hitTestRectangle(bullet, house)) {
           house.hp--;
           house.tint = 0xff3300;
@@ -122,28 +120,23 @@ function setup() {
 
   //Start the game loop
   app.ticker.add(delta => gameLoop(delta));
-
   id = PIXI.loader.resources['/tankSheet.json'].textures;
-
   for (let i = 0; i <= 4; i++) {
     for (let j = 0; j <= 4; j++) {
       let grass = new Sprite(id['grass03.png']);
       const grassRatio = (Scale.unit * 128) / 512;
       grass.scale.set(grassRatio, grassRatio);
       grass.anchor.set(0.5);
-
       grass.x = Scale.width / 2 + i * 128 * Scale.unit - 192 * Scale.unit;
       grass.y = Scale.height / 2 + j * 128 * Scale.unit - 192 * Scale.unit;
       grass.vx = 0;
       grass.vy = 0;
-
       ground.push(grass);
       app.stage.addChild(grass);
     }
   }
 
   //create explosion
-
   explosionSprite = new PIXI.Texture.fromImage('/explosion.png');
   explosion = new Sprite(explosionSprite);
   const explosionRatio = (Scale.unit * 16) / 204;
@@ -156,7 +149,6 @@ function setup() {
   explosion.vy = 0;
 
   //create Tank
-
   tank = new Sprite(id['tank.png']);
   const tankRatio = (Scale.unit * 16) / 204;
   tank.scale.set(tankRatio, tankRatio);
@@ -170,7 +162,6 @@ function setup() {
   app.stage.addChild(tank);
 
   //create enemy Tank2
-
   let numberOfTanks = 10,
     spacing = 20,
     xOffset = 100,
@@ -192,19 +183,7 @@ function setup() {
     app.stage.addChild(tank2);
   }
 
-  // tank2 = new Sprite(id['tank2.png'])
-  // tank2.scale.set(tankRatio, tankRatio);
-  // tank2.x = Scale.width / 2;
-  // tank2.y = Scale.height / 2;
-  // tank2.anchor.set(0.5, 0.5);
-  // tank2.rotation = 0;
-  // tank2.vx = 0;
-  // tank2.vy = 0;
-  // tank.hp = 10;
-  // app.stage.addChild(tank2)
-
   //create Houses
-
   let houseSprite = new PIXI.Texture.fromImage('/House.png');
 
   for (let i = 0; i < 20; i++) {
@@ -280,13 +259,6 @@ let upListener = event => {
 //Create the bullet
 
 app.stage.interactive = true;
-
-// app.stage.on('mousedown', function(e) {
-//   shoot(tank.rotation, {
-//     x: tank.position.x + Math.cos(tank.rotation) * 20,
-//     y: tank.position.y + Math.sin(tank.rotation) * 20,
-//   });
-// });
 
 bulletSprite = new PIXI.Texture.fromImage('/bullet.png');
 
@@ -374,7 +346,7 @@ function spriteCollision(sprite, object) {
   //Left
   if (sprite.x < object.x) {
     sprite.vx = 0;
-    //sprite.x = container.x;
+    //sprite.x = object.x;
     collision = 'left';
   }
 
