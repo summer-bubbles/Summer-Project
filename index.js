@@ -76,7 +76,6 @@ function play(delta) {
     if (bullets.length !== 0) {
       for (let j = 0; j < bullets.length; j++) {
         bullet = bullets[j];
-
         if (hitTestRectangle(tank, house)) {
           house.tint = 0xff3300;
 
@@ -100,16 +99,6 @@ function play(delta) {
             houses[i].x = 0;
             houses[i].y = 0;
           }
-
-          // explosion = new Sprite(explosionSprite);
-          // const explosionRatio = (Scale.unit * 16) / 204;
-          // explosion.scale.set(explosionRatio, explosionRatio);
-          // explosion.x = house.centerX;
-          // explosion.y = house.centerY;
-          // explosion.anchor.set(0.7, 0.7);
-          // app.stage.addChild(explosion);
-          //house.visible = false;
-          //explosion.visible = false;
         } else {
           house.tint = 0xccff99;
         }
