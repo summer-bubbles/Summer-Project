@@ -62,19 +62,10 @@ function gameLoop(delta) {
 function play(delta) {
   tank.x += tank.vx * Scale.unit;
   tank.y += tank.vy * Scale.unit;
-  // for (let i = 0; i < ground.length; i++) {
-  //   console.log(ground[i].x)
-  //   ground[i].x += tank.vx * Scale.unit;
-  //   ground[i].y += tank.vy * Scale.unit;
-  // }
-  //grass.x += grass.vx * Scale.unit;
-  //grass.y += grass.vy * Scale.unit;
 
   enemyTanks.forEach(tank => {
     tank.y += tank.vy;
-
     let tankHitsWall = contain(tank, { x: 20, y: 20, width: Scale.width, height: Scale.height })
-
     if (tankHitsWall === 'top' || tankHitsWall === 'bottom'){
       tank.vy *= -1
     }
@@ -84,7 +75,6 @@ function play(delta) {
 
   for (let i = 0; i < houses.length; i++) {
     house = houses[i];
-
     if (bullets.length !== 0) {
       for (let j = 0; j < bullets.length; j++) {
         bullet = bullets[j];
@@ -97,6 +87,7 @@ function play(delta) {
             width: house.width,
             height: house.height,
           });
+          
         } else if (hitTestRectangle(bullet, house)) {
           house.hp--;
           house.tint = 0xff3300;
