@@ -90,16 +90,16 @@ function play(delta) {
           house.hp--;
           house.tint = 0xff3300;
           bullet.hp--;
-          if (bullet.hp===0){
-            app.stage.removeChild(bullet)
-            bullet.x=0;
-            bullet.y=0;
-          } 
+          if (bullet.hp === 0) {
+            app.stage.removeChild(bullet);
+            bullet.x = 0;
+            bullet.y = 0;
+          }
           if (house.hp === 0) {
             app.stage.removeChild(house);
             houses[i].x = 0;
             houses[i].y = 0;
-          } 
+          }
 
           // explosion = new Sprite(explosionSprite);
           // const explosionRatio = (Scale.unit * 16) / 204;
@@ -410,7 +410,7 @@ function contain(sprite, container) {
 }
 
 function checkHp(sprite) {
-  console.log('in the helper function')
+  console.log('in the helper function');
   if (sprite.hp === 0) {
     return 0;
   } else {
