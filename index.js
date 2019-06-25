@@ -19,6 +19,7 @@ let ground = [];
 let houses = [];
 let bulletSpeed = 5;
 let bullets = [];
+let enemyTanks = [];
 
 //Aliases
 let Application = PIXI.Application,
@@ -68,6 +69,17 @@ function play(delta) {
   // }
   //grass.x += grass.vx * Scale.unit;
   //grass.y += grass.vy * Scale.unit;
+
+  enemyTanks.forEach(tank => {
+    tank.y += tank.vy;
+
+    let tankHitsWall = contain(tank, { x: 20, y: 20, width: Scale.width, height: Scale.height })
+
+    if (tankHitsWall === 'top' || tankHitsWall === 'bottom'){
+      tank.vy *= -1
+    }
+  });
+
   contain(tank, { x: 20, y: 20, width: Scale.width, height: Scale.height });
 
   for (let i = 0; i < houses.length; i++) {
@@ -165,6 +177,40 @@ function setup() {
   tank.vy = 0;
   tank.hp = 10;
   app.stage.addChild(tank);
+
+  //create enemy Tank2
+
+  let numberOfTanks = 10,
+    spacing = 20,
+    xOffset = 100,
+    speed = 2,
+    direction = 1;
+
+  for (let i = 0; i < numberOfTanks; i++) {
+    tank2 = new Sprite(id['tank2.png']);
+    tank2.scale.set(tankRatio, tankRatio);
+    let x = spacing * i + xOffset;
+    let y = randomInt(0, app.stage.height - tank2.height);
+
+    tank2.x = x;
+    tank2.y = y;
+    tank2.vy = speed * direction;
+    direction *= -1;
+
+    enemyTanks.push(tank2);
+    app.stage.addChild(tank2);
+  }
+
+  // tank2 = new Sprite(id['tank2.png'])
+  // tank2.scale.set(tankRatio, tankRatio);
+  // tank2.x = Scale.width / 2;
+  // tank2.y = Scale.height / 2;
+  // tank2.anchor.set(0.5, 0.5);
+  // tank2.rotation = 0;
+  // tank2.vx = 0;
+  // tank2.vy = 0;
+  // tank.hp = 10;
+  // app.stage.addChild(tank2)
 
   //create Houses
 
@@ -405,6 +451,10 @@ function checkHp(sprite) {
   } else {
     return sprite.hp;
   }
+}
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function animate() {
