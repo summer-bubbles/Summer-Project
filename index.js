@@ -136,18 +136,6 @@ function setup() {
     }
   }
 
-  //create explosion
-  explosionSprite = new PIXI.Texture.fromImage('/explosion.png');
-  explosion = new Sprite(explosionSprite);
-  const explosionRatio = (Scale.unit * 16) / 204;
-  explosion.scale.set(explosionRatio, explosionRatio);
-  explosion.x = Scale.width / 2;
-  explosion.y = Scale.height / 2;
-  explosion.anchor.set(0.5, 0.5);
-  explosion.rotation = 0;
-  explosion.vx = 0;
-  explosion.vy = 0;
-
   //create Tank
   tank = new Sprite(id['tank.png']);
   const tankRatio = (Scale.unit * 16) / 204;
