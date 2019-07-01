@@ -7,29 +7,24 @@ const clienth = Math.max(
   window.innerHeight || 0
 );
 const clientm = Math.min(clientw, clienth);
-
 let Scale = {
   width: clientm * 0.9,
   height: clientm * 0.9,
   unit: (clientm * 0.9) / 256,
 };
-
 //Holder array variables
 let ground = [];
 let houses = [];
 let bulletSpeed = 5;
 let bullets = [];
 let enemyTanks = [];
-
 //frame counter;
 let counter = 0;
-
 //Aliases
 let Application = PIXI.Application,
   loader = PIXI.loader,
   resources = PIXI.loader.resources,
   Sprite = PIXI.Sprite;
-
 //Create a Pixi Application
 let app = new Application({
   width: Scale.width,
@@ -39,13 +34,10 @@ let app = new Application({
   autoDensity: true,
   backgroundColor: 0x1b4f72,
 });
-
 //Add the canvas that Pixi automatically created for you to the HTML document
 document.getElementById('playfield').appendChild(app.view);
-
 //load an image and run the `setup` function when it's done
 loader.add('/tankSheet.json').load(setup);
-
 //Define variables that might be used in more than one function
 let tank,
   tank2,
@@ -56,17 +48,14 @@ let tank,
   house,
   explosion,
   explosionSprite;
-
 function gameLoop(delta) {
   counter++;
   state(delta);
 }
-
 // eslint-disable-next-line complexity
 function play(delta) {
   tank.x += tank.vx * Scale.unit;
   tank.y += tank.vy * Scale.unit;
-
   enemyTanks.forEach(tank => {
     tank.y += tank.vy;
     let tankHitsWall = contain(tank, { x: 20, y: 20, width: Scale.width, height: Scale.height })
@@ -74,9 +63,7 @@ function play(delta) {
       tank.vy *= -1
     }
   });
-
   contain(tank, { x: 20, y: 20, width: Scale.width, height: Scale.height });
-
   for (let i = 0; i < houses.length; i++) {
     house = houses[i];
     if (bullets.length !== 0) {
@@ -111,13 +98,11 @@ function play(delta) {
     }
   }
 }
-
 //This `setup` function will run when the image has loaded
 // eslint-disable-next-line max-statements
 function setup() {
   //Set the game state
   state = play;
-
   //Start the game loop
   app.ticker.add(delta => gameLoop(delta));
   id = PIXI.loader.resources['/tankSheet.json'].textures;
@@ -148,32 +133,26 @@ function setup() {
   tank.vy = 0;
   tank.hp = 10;
   app.stage.addChild(tank);
-
   //create enemy Tank2
   let numberOfTanks = 10,
     spacing = 20,
     xOffset = 100,
     speed = 2,
     direction = 1;
-
   for (let i = 0; i < numberOfTanks; i++) {
     tank2 = new Sprite(id['tank2.png']);
     tank2.scale.set(tankRatio, tankRatio);
     let x = spacing * i + xOffset;
     let y = randomInt(0, app.stage.height - tank2.height);
-
     tank2.x = x;
     tank2.y = y;
     tank2.vy = speed * direction;
     direction *= -1;
-
     enemyTanks.push(tank2);
     app.stage.addChild(tank2);
   }
-
   //create Houses
   let houseSprite = new PIXI.Texture.fromImage('/House.png');
-
   for (let i = 0; i < 20; i++) {
     house = new Sprite(houseSprite);
     const houseRatio = (Scale.unit * 4) / 204;
@@ -189,7 +168,6 @@ function setup() {
     app.stage.addChild(house);
   }
 }
-
 //Adding event listeners for up and down
 // eslint-disable-next-line complexity
 let downListener = event => {
@@ -228,7 +206,6 @@ let downListener = event => {
     });
   }
 };
-
 let upListener = event => {
   if (event.code === 'KeyW') {
     tank.vy = 0;
@@ -243,13 +220,9 @@ let upListener = event => {
     tank.vx = 0;
   }
 };
-
 //Create the bullet
-
 app.stage.interactive = true;
-
 bulletSprite = new PIXI.Texture.fromImage('/bullet.png');
-
 function shoot(rotation, startPosition) {
   bullet = new PIXI.Sprite(bulletSprite);
   const bulletRatio = (Scale.unit * 4) / 256;
@@ -262,14 +235,12 @@ function shoot(rotation, startPosition) {
   app.stage.addChild(bullet);
   bullets.push(bullet);
 }
-
 function rotateToPoint(mx, my, px, py) {
   var dist_Y = my - py;
   var dist_X = mx - px;
   var angle = Math.atan2(dist_Y, dist_X);
   return angle;
 }
-
 function getVisualMetrics() {
   return {
     height: app.renderer.height,
@@ -280,34 +251,27 @@ function getVisualMetrics() {
     ymax: app.renderer.height - 1,
   };
 }
-
 function hitTestRectangle(r1, r2) {
   //Define the variables we'll need to calculate
   let hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
-
   //hit will determine whether there's a collision
   hit = false;
-
   //Find the center points of each sprite
   r1.centerX = r1.x + r1.width / 2;
   r1.centerY = r1.y + r1.height / 2;
   r2.centerX = r2.x + r2.width / 2;
   r2.centerY = r2.y + r2.height / 2;
-
   //Find the half-widths and half-heights of each sprite
   r1.halfWidth = r1.width / 2;
   r1.halfHeight = r1.height / 2;
   r2.halfWidth = r2.width / 2;
   r2.halfHeight = r2.height / 2;
-
   //Calculate the distance vector between the sprites
   vx = r1.centerX - r2.centerX;
   vy = r1.centerY - r2.centerY;
-
   //Figure out the combined half-widths and half-heights
   combinedHalfWidths = r1.halfWidth + r2.halfWidth;
   combinedHalfHeights = r1.halfHeight + r2.halfHeight;
-
   //Check for a collision on the x axis
   if (Math.abs(vx) < combinedHalfWidths) {
     //A collision might be occurring. Check for a collision on the y axis
@@ -322,79 +286,65 @@ function hitTestRectangle(r1, r2) {
     //There's no collision on the x axis
     hit = false;
   }
-
   //`hit` will be either `true` or `false`
   return hit;
 }
-
 //spriteCollision helper func that checks for sprite boundaries
 function spriteCollision(sprite, object) {
   let collision = undefined;
-
   //Left
   if (sprite.x < object.x) {
     sprite.vx = 0;
     //sprite.x = object.x;
     collision = 'left';
   }
-
   //Top
   if (sprite.y < object.y) {
     sprite.vy = 0;
     //sprite.y = container.y;
     collision = 'top';
   }
-
   //Right
   if (sprite.x + sprite.width > object.width) {
     sprite.vx = 0;
     //sprite.x = container.width - sprite.width;
     collision = 'right';
   }
-
   //Bottom
   if (sprite.y + sprite.height > object.height) {
     sprite.vy = 0;
     //sprite.y = container.height - sprite.height;
     collision = 'bottom';
   }
-
   //Return the `collision` value
   return collision;
 }
-
 //Contain Helper Function For Boundries around sprite!
 function contain(sprite, container) {
   let collision = undefined;
-
   //Left
   if (sprite.x < container.x) {
     sprite.x = container.x;
     collision = 'left';
   }
-
   //Top
   if (sprite.y < container.y) {
     sprite.y = container.y;
     collision = 'top';
   }
-
   //Right
   if (sprite.x + sprite.width > container.width) {
     sprite.x = container.width - sprite.width;
     collision = 'right';
   }
-
   //Bottom
   if (sprite.y + sprite.height > container.height) {
     sprite.y = container.height - sprite.height;
     collision = 'bottom';
   }
-
   //Return the `collision` value
   return collision;
 }
-
 function checkHp(sprite) {
   console.log('in the helper function');
   if (sprite.hp === 0) {
@@ -403,11 +353,9 @@ function checkHp(sprite) {
     return sprite.hp;
   }
 }
-
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
 function animate() {
   requestAnimationFrame(animate);
   for (var b = bullets.length - 1; b >= 0; b--) {
@@ -415,9 +363,6 @@ function animate() {
     bullets[b].position.y += Math.sin(bullets[b].rotation) * bulletSpeed;
   }
 }
-
 animate();
-
 window.addEventListener('keydown', downListener, false);
-
 window.addEventListener('keyup', upListener, false);
