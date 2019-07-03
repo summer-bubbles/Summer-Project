@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 const clientw = Math.max(
   document.documentElement.clientWidth,
   window.innerWidth || 0
@@ -18,13 +19,17 @@ let houses = [];
 let bulletSpeed = 5;
 let bullets = [];
 let enemyTanks = [];
+
 //frame counter;
+
 let counter = 0;
+
 //Aliases
 let Application = PIXI.Application,
   loader = PIXI.loader,
   resources = PIXI.loader.resources,
   Sprite = PIXI.Sprite;
+
 //Create a Pixi Application
 let app = new Application({
   width: Scale.width,
@@ -34,10 +39,13 @@ let app = new Application({
   autoDensity: true,
   backgroundColor: 0x1b4f72,
 });
+
 //Add the canvas that Pixi automatically created for you to the HTML document
 document.getElementById('playfield').appendChild(app.view);
+
 //load an image and run the `setup` function when it's done
 loader.add('/tankSheet.json').load(setup);
+
 //Define variables that might be used in more than one function
 let tank,
   tank2,
@@ -48,6 +56,7 @@ let tank,
   house,
   explosion,
   explosionSprite;
+
 function gameLoop(delta) {
   counter++;
   state(delta);
@@ -58,11 +67,41 @@ function play(delta) {
   tank.y += tank.vy * Scale.unit;
   enemyTanks.forEach(tank => {
     tank.y += tank.vy;
-    let tankHitsWall = contain(tank, { x: 20, y: 20, width: Scale.width, height: Scale.height })
-    if (tankHitsWall === 'top' || tankHitsWall === 'bottom'){
-      tank.vy *= -1
+    let tankHitsWall = contain(tank, {
+      x: 20,
+      y: 20,
+      width: Scale.width,
+      height: Scale.height,
+    });
+    if (tankHitsWall === 'top' || tankHitsWall === 'bottom') {
+      tank.vy *= -1;
     }
   });
+
+  for (let i = 0; i < enemyTanks.length; i++) {
+    let enemyTank = enemyTanks[i];
+    if (bullets.length !== 0) {
+      for (let j = 0; j < bullets.length; j++) {
+        bullet = bullets[j];
+        if (hitTestRectangle(bullet, enemyTank)) {
+          enemyTank.hp--;
+          enemyTank.tint = 0xff3300;
+          bullet.hp--;
+          if (bullet.hp === 0) {
+            app.stage.removeChild(bullet);
+            bullet.x = 0;
+            bullet.y = 0;
+          }
+          if (enemyTank.hp === 0) {
+            app.stage.removeChild(enemyTank);
+            enemyTank.x = 0;
+            enemyTank.y = 0;
+          }
+        }
+      }
+    }
+  }
+
   contain(tank, { x: 20, y: 20, width: Scale.width, height: Scale.height });
   for (let i = 0; i < houses.length; i++) {
     house = houses[i];
@@ -135,9 +174,9 @@ function setup() {
   app.stage.addChild(tank);
   //create enemy Tank2
   let numberOfTanks = 10,
-    spacing = 20,
-    xOffset = 100,
-    speed = 2,
+    spacing = 40,
+    xOffset = 50,
+    speed = 1,
     direction = 1;
   for (let i = 0; i < numberOfTanks; i++) {
     tank2 = new Sprite(id['tank2.png']);
@@ -146,6 +185,7 @@ function setup() {
     let y = randomInt(0, app.stage.height - tank2.height);
     tank2.x = x;
     tank2.y = y;
+    tank2.hp = 10;
     tank2.vy = speed * direction;
     direction *= -1;
     enemyTanks.push(tank2);
