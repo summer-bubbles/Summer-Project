@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 const clientw = Math.max(
   document.documentElement.clientWidth,
   window.innerWidth || 0
@@ -75,6 +76,30 @@ function play(delta) {
     }
   });
 
+  for (let i = 0; i < enemyTanks.length; i++){
+    let enemyTank = enemyTanks[i];
+    if (bullets.length !== 0) {
+      for (let j = 0; j < bullets.length; j++) {
+        bullet = bullets[j];
+        if (hitTestRectangle(bullet, enemyTank)){
+          enemyTank.hp--;
+          enemyTank.tint = 0xff3300;
+          bullet.hp--;
+          if (bullet.hp === 0) {
+            app.stage.removeChild(bullet);
+            bullet.x = 0;
+            bullet.y = 0;
+          }
+          if (enemyTank.hp === 0) {
+            app.stage.removeChild(house);
+            houses[i].x = 0;
+            houses[i].y = 0;
+          }
+        }
+      }
+    }
+  }
+
   contain(tank, { x: 20, y: 20, width: Scale.width, height: Scale.height });
 
   for (let i = 0; i < houses.length; i++) {
@@ -151,9 +176,9 @@ function setup() {
 
   //create enemy Tank2
   let numberOfTanks = 10,
-    spacing = 20,
-    xOffset = 100,
-    speed = 2,
+    spacing = 40,
+    xOffset = 50,
+    speed = 1,
     direction = 1;
 
   for (let i = 0; i < numberOfTanks; i++) {
